@@ -40,7 +40,7 @@ def test_incident_timeline_includes_prediction_phase():
 def test_optimization_proof_calculates_improvement():
     before = sample_snapshot(cpu=90.0, memory=80.0)
     after = sample_snapshot(cpu=60.0, memory=70.0)
-    result = OptimizationProofEngine().summarize({"before": before, "after": after, "execution_id": "exec-test"})
+    result = OptimizationProofEngine().summarize({"mode": "apply", "before": before, "after": after, "execution_id": "exec-test"})
     assert result["status"] == "measured"
     assert result["effectiveness_score"] > 0
     assert result["statements"]

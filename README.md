@@ -529,3 +529,11 @@ AstraOS connects real measurement, prediction, policy, and verification into one
 ---
 
 *The implementation is the source of truth. No capabilities are claimed beyond what the source code demonstrates.*
+If you find potential in Astra OS and my vision, I kindly request your feedback and additional time to develop it into a complete, professionally engineered, tested, and real-world-ready system.
+
+I also hope to explore a much bigger vision:
+
+PROJECT COGNITIVE FABRIC
+A self-adaptive intelligence engine for Snapdragon PCs that understands workloads, intelligently coordinates AI models and hardware resources, adapts to changing conditions, and verifies its decisions.
+
+I would be grateful for the opportunity to continue building Astra OS, validate it on compatible Snapdragon hardware, and explore Cognitive Fabric as a larger research and engineering vision—demonstrating their potential through measurable results.
