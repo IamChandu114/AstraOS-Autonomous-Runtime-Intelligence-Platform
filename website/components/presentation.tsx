@@ -15,9 +15,18 @@ const index = [
   ['08', 'Future Work', 'Kernel control, distributed edge intelligence, and research direction'],
 ]
 
+// Convert any Google Drive share/view URL to its embeddable /preview URL
+function toEmbedUrl(url: string): string {
+  const match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/)
+  if (match) return `https://drive.google.com/file/d/${match[1]}/preview`
+  return url
+}
+
 export function Presentation({ source = process.env.NEXT_PUBLIC_ASTRAOS_PRESENTATION_URL }: { source?: string }) {
   const video = useRef<HTMLVideoElement>(null)
   const hasVideo = Boolean(source)
+  const isDrive = Boolean(source?.includes('drive.google.com'))
+  const embedSrc = source && isDrive ? toEmbedUrl(source) : source
 
   return <section id="presentation" className="border-y hairline bg-card" aria-labelledby="presentation-title">
     <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-24">
@@ -32,7 +41,12 @@ export function Presentation({ source = process.env.NEXT_PUBLIC_ASTRAOS_PRESENTA
 
       <div className="mt-12 overflow-hidden border hairline bg-background">
         <div className="relative aspect-video">
-          {hasVideo ? <video ref={video} src={source} className="size-full bg-black object-contain" controls playsInline preload="metadata" aria-label="AstraOS technical project presentation">{process.env.NEXT_PUBLIC_ASTRAOS_PRESENTATION_CAPTIONS_URL && <track kind="captions" src={process.env.NEXT_PUBLIC_ASTRAOS_PRESENTATION_CAPTIONS_URL} srcLang="en" label="English captions" default />}</video> : <div className="grid size-full place-items-center p-8 text-center"><div><div className="mx-auto mb-6 flex size-14 items-center justify-center border border-accent text-accent"><Play className="size-5" /></div><div className="mono text-xs tracking-[.16em] text-accent">ASTRAOS</div><div className="mt-2 text-xl font-medium tracking-[-.03em]">TECHNICAL PRESENTATION</div><p className="mt-4 text-sm text-muted-foreground">Project presentation video will appear here.</p><div className="mt-6 mono text-[10px] tracking-[.1em] text-muted-foreground">VIDEO NOT ATTACHED</div></div></div>}
+          {hasVideo
+            ? isDrive
+              ? <iframe src={embedSrc} className="size-full border-0" allow="autoplay; fullscreen" allowFullScreen title="AstraOS technical project presentation" />
+              : <video ref={video} src={source} className="size-full bg-black object-contain" controls playsInline preload="metadata" aria-label="AstraOS technical project presentation">{process.env.NEXT_PUBLIC_ASTRAOS_PRESENTATION_CAPTIONS_URL && <track kind="captions" src={process.env.NEXT_PUBLIC_ASTRAOS_PRESENTATION_CAPTIONS_URL} srcLang="en" label="English captions" default />}</video>
+            : <div className="grid size-full place-items-center p-8 text-center"><div><div className="mx-auto mb-6 flex size-14 items-center justify-center border border-accent text-accent"><Play className="size-5" /></div><div className="mono text-xs tracking-[.16em] text-accent">ASTRAOS</div><div className="mt-2 text-xl font-medium tracking-[-.03em]">TECHNICAL PRESENTATION</div><p className="mt-4 text-sm text-muted-foreground">Project presentation video will appear here.</p><div className="mt-6 mono text-[10px] tracking-[.1em] text-muted-foreground">VIDEO NOT ATTACHED</div></div></div>
+          }
         </div>
         <div className="grid border-t hairline sm:grid-cols-4">
           <Meta label="PRESENTATION" value="AstraOS Technical Walkthrough" />
@@ -44,7 +58,7 @@ export function Presentation({ source = process.env.NEXT_PUBLIC_ASTRAOS_PRESENTA
 
       <div className="mt-6 flex flex-wrap items-center gap-5">
         <button type="button" disabled className="inline-flex cursor-not-allowed items-center gap-2 border-b border-border pb-2 mono text-[11px] tracking-[.08em] text-muted-foreground"><FileText className="size-3.5" /> Transcript unavailable</button>
-        <span className="mono text-[10px] tracking-[.08em] text-muted-foreground">{source ? 'NATIVE HTML5 PLAYER / CAPTIONS CONFIGURED WHEN PROVIDED' : 'PLAYER READY FOR MP4 OR WEBM'}</span>
+        <span className="mono text-[10px] tracking-[.08em] text-muted-foreground">{source ? (isDrive ? 'GOOGLE DRIVE EMBED / FULLSCREEN SUPPORTED' : 'NATIVE HTML5 PLAYER / CAPTIONS CONFIGURED WHEN PROVIDED') : 'PLAYER READY FOR MP4 OR WEBM'}</span>
       </div>
 
       <div className="mt-14 grid gap-12 lg:grid-cols-[.9fr_1.1fr]">
