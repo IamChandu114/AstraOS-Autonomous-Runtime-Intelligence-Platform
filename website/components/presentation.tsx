@@ -15,14 +15,16 @@ const index = [
   ['08', 'Future Work', 'Kernel control, distributed edge intelligence, and research direction'],
 ]
 
-// Convert any Google Drive share/view URL to its embeddable /preview URL
+// Convert any Google Drive URL into an embeddable preview URL
 function toEmbedUrl(url: string): string {
-  const match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/)
+  const match = url.match(/(?:file\/d\/|id=)([a-zA-Z0-9_-]+)/)
   if (match) return `https://drive.google.com/file/d/${match[1]}/preview`
   return url
 }
 
-export function Presentation({ source = process.env.NEXT_PUBLIC_ASTRAOS_PRESENTATION_URL }: { source?: string }) {
+export function Presentation({
+  source = process.env.NEXT_PUBLIC_ASTRAOS_PRESENTATION_URL || 'https://drive.google.com/file/d/1VOFFIrXLjNES5H5TqpxO5M6V7zr6wER1/view?usp=sharing'
+}: { source?: string }) {
   const video = useRef<HTMLVideoElement>(null)
   const hasVideo = Boolean(source)
   const isDrive = Boolean(source?.includes('drive.google.com'))
